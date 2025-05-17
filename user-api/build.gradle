@@ -36,6 +36,8 @@ dependencies {
 
     testImplementation 'com.h2database:h2' // 테스트할 때만 사용
 
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     runtimeOnly 'com.mysql:mysql-connector-j'

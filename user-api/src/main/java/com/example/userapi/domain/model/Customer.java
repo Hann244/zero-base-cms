@@ -11,6 +11,7 @@ import java.util.Locale;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
