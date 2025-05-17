@@ -1,5 +1,6 @@
 package com.example.userapi.exception;
 
+import jakarta.servlet.ServletException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
