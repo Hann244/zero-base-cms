@@ -37,6 +37,8 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33'
 
     testImplementation 'com.h2database:h2' // 테스트할 때만 사용
+    implementation 'com.h2database:h2'
+    runtimeOnly 'com.h2database:h2'
 
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
