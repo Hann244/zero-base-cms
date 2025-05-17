@@ -2,6 +2,3 @@ rootProject.name = 'cms'
 
 include('user-api')
 include('zerobase-domain')
-
-project(':user-api').projectDir = file('user-api')
-project(':zerobase-domain').projectDir = file('zerobase-domain')

@@ -1,4 +1,4 @@
-package com.example.userapi.repository;
+package com.example.userapi.domain.repository;
 
 import com.example.userapi.domain.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;

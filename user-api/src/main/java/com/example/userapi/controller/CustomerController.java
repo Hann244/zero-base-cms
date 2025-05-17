@@ -3,7 +3,7 @@ package com.example.userapi.controller;
 import com.example.userapi.domain.customer.CustomerDto;
 import com.example.userapi.domain.model.Customer;
 import com.example.userapi.exception.CustomException;
-import com.example.userapi.service.CustomerService;
+import com.example.userapi.service.customer.CustomerService;
 import com.example.zerobasedomain.domain.common.UserVo;
 import com.example.zerobasedomain.domain.config.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
