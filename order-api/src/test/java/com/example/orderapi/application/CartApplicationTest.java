@@ -1,10 +1,12 @@
-package com.example.orderapi.service;
+package com.example.orderapi.application;
 
 import com.example.orderapi.domain.model.Product;
+import com.example.orderapi.domain.product.AddProductCartForm;
 import com.example.orderapi.domain.product.AddProductForm;
 import com.example.orderapi.domain.product.AddProductItemForm;
-import com.example.orderapi.domain.repository.ProductItemRepository;
+import com.example.orderapi.domain.redis.Cart;
 import com.example.orderapi.domain.repository.ProductRepository;
+import com.example.orderapi.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,30 +17,64 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class ProductServiceTest {
-
+class CartApplicationTest {
+    @Autowired
+    private CartApplication cartApplication;
     @Autowired
     private ProductService productService;
-
     @Autowired
     private ProductRepository productRepository;
 
-
     @Test
-    void ADD_PRODUCT_TEST() {
-        Long sellerId = 1L;
-        AddProductForm form = makeProductForm("나이키 에어포스", "신발", 3);
+    void ADD_TEST_MODIFY() {
 
-        Product p = productService.addProduct(sellerId, form);
+        Long customerId = 100L;
 
+        cartApplication.clearCart(customerId);
+
+        Product p = add_product();
         Product result = productRepository.findWithProductItemsById(p.getId()).get();
+
         assertNotNull(result);
+
         assertEquals(result.getName(), "나이키 에어포스");
         assertEquals(result.getDescription(), "신발");
         assertEquals(result.getProductItems().size(), 3);
         assertEquals(result.getProductItems().get(0).getName(), "나이키 에어포스");
         assertEquals(result.getProductItems().get(0).getPrice(), 10000);
-        assertEquals(result.getProductItems().get(0).getCount(), 1);
+//        assertEquals(result.getProductItems().get(0).getCount(), 1);
+
+        Cart cart = cartApplication.addCart(customerId, makeAddForm(result));
+
+        // 데이터가 잘 들어 갔는지
+        assertEquals(cart.getMessages().size(), 0);
+
+        cart = cartApplication.getCart(customerId);
+        assertEquals(cart.getMessages().size(), 1);
+    }
+
+    AddProductCartForm makeAddForm(Product p) {
+        AddProductCartForm.ProductItem productItem =
+                AddProductCartForm.ProductItem.builder()
+                        .id(p.getProductItems().get(0).getId())
+                        .name(p.getProductItems().get(0).getName())
+                        .count(5)
+                        .price(20000)
+                        .build();
+        return AddProductCartForm.builder()
+                        .id(p.getId())
+                        .sellerId(p.getSellerId())
+                        .name(p.getName())
+                        .description(p.getDescription())
+                        .items(List.of(productItem))
+                        .build();
+    }
+
+    Product add_product() {
+        Long sellerId = 1L;
+        AddProductForm form = makeProductForm("나이키 에어포스", "신발", 3);
+
+        return productService.addProduct(sellerId, form);
 
     }
 
@@ -59,7 +95,8 @@ class ProductServiceTest {
                 .productId(productId)
                 .name(name)
                 .price(10000)
-                .count(1)
+                .count(10)
                 .build();
     }
+
 }
