@@ -1,5 +1,6 @@
 package com.example.orderapi.controller;
 
+import com.example.orderapi.application.CartApplication;
 import com.example.orderapi.domain.product.AddProductCartForm;
 import com.example.orderapi.domain.redis.Cart;
 import com.example.orderapi.service.CartService;
@@ -16,6 +17,7 @@ public class CustomerCartController {
     // 임시 코드
     private final CartService cartService;
     private final JwtAuthenticationProvider provider;
+    private final CartApplication cartApplication;
 
     @PostMapping
     public ResponseEntity<Cart> addCart(
@@ -28,5 +30,12 @@ public class CustomerCartController {
     public ResponseEntity<Cart> showCart(
             @RequestHeader(name = "X-AUTH-TOKEN") String token) {
         return ResponseEntity.ok(cartService.getCart(provider.getUserVo(token).getId()));
+    }
+
+    @PutMapping
+    public ResponseEntity<Cart> updateCart(
+            @RequestHeader(name = "X-AUTH-TOKEN") String token,
+            @RequestBody Cart cart) {
+        return ResponseEntity.ok(cartApplication.updateCart(provider.getUserVo(token).getId(), cart));
     }
 }
